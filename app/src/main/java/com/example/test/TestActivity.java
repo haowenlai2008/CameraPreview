@@ -25,7 +25,6 @@ public class TestActivity extends Activity implements  SurfaceHolder.Callback{
     private SurfaceHolder mSurfaceHolder;
     private int cameraId = 1;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,25 +32,26 @@ public class TestActivity extends Activity implements  SurfaceHolder.Callback{
         setContentView(R.layout.test_layour);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         initView();
-        initCallBack();
+        initButton();
     }
 
     //视图初始化
     private void initView() {
-        surfaceView = findViewById(R.id.surfaceView);
-        mSurfaceHolder = surfaceView.getHolder();
-        mSurfaceHolder.addCallback(this);
+        surfaceView = findViewById(R.id.surfaceView);//获得SurfaceView的实例
+        mSurfaceHolder = surfaceView.getHolder();//获得SurfaceView的Holder
+        mSurfaceHolder.addCallback(this);//设置Holder的回调
     }
 
     //打开照相机
     public void CameraOpen() {
         try
         {
+            //打开摄像机
             mCamera = Camera.open(cameraId);
-            mCamera.setPreviewDisplay(mSurfaceHolder);
             mCamera.setDisplayOrientation(90);
+            //绑定Surface并开启预览
+            mCamera.setPreviewDisplay(mSurfaceHolder);
             mCamera.startPreview();
-            Toast.makeText(TestActivity.this, "surface created", Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
             mCamera.release();
             mCamera = null;
@@ -60,7 +60,8 @@ public class TestActivity extends Activity implements  SurfaceHolder.Callback{
     }
 
     //回调初始化
-    private void initCallBack() {
+    private void initButton() {
+        //返回上个界面的按钮
         mButton = findViewById(R.id.button2);
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,6 +71,7 @@ public class TestActivity extends Activity implements  SurfaceHolder.Callback{
                 startActivity(intent);
             }
         });
+        //翻转摄像机的按钮
         switchBtn = findViewById(R.id.button3);
         switchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,7 +79,6 @@ public class TestActivity extends Activity implements  SurfaceHolder.Callback{
                 CameraSwitch();
             }
         });
-
     }
 
     @Override
@@ -104,6 +105,7 @@ public class TestActivity extends Activity implements  SurfaceHolder.Callback{
         mCamera = null;
     }
 
+    //翻转摄像机
     public void CameraSwitch()
     {
         cameraId = cameraId == 1 ? 0 : 1;
